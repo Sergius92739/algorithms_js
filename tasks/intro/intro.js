@@ -21,15 +21,39 @@ function getNum1(arr, bookSize) {
 console.log(getNum1(arr, 32))
 
 // Вариант с рекурсией
-function getNum2(left, right, arr, bookSize) {
+function getNum(arr, bookSize, left = 0, right = arr.length - 1) {
   const middle = Math.floor((left + right) / 2);
 
   if (arr[middle] <= bookSize && arr[middle + 1] > bookSize) {
     return arr.length - (middle + 1);
   }
-  
-  return arr[middle] > bookSize
-   ? getNum2(left, middle - 1, arr, bookSize)
-   : getNum2(middle + 1, right, arr, bookSize);
+  if (right <= 0) {
+     return arr.length;
+  }
+  if (left >= right) {
+     return 0;
+  }
+  arr[middle] > bookSize ? right = middle - 1 : left = middle + 1;
+
+  return getNum(arr, bookSize, left, right);
 }
-console.log(getNum2(0, arr.length - 1, arr, 32));
+
+// Вариант с внутренней функцией
+function getNum(arr, bookSize) {
+  const func = (left = 0, right = arr.length - 1) => {
+    const middle = Math.floor((left + right) / 2);
+
+    if (arr[middle] <= bookSize && arr[middle + 1] > bookSize) {
+      return arr.length - (middle + 1);
+    }
+    if (right <= 0) {
+      return arr.length;
+    }
+    if (left >= right) {
+      return 0;
+    }
+    arr[middle] > bookSize ? right = middle - 1 : left = middle + 1;
+    return func(left, right);
+  }
+  return func()
+}
